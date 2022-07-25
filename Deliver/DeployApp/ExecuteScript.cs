@@ -20,7 +20,6 @@ namespace DeployApp
                 result.Folder = reader[_folderNameField].ToString();
                 result.ScriptNumber = Convert.ToInt32(reader[_scriptNameFiled].ToString()?.Split(".")[0]);
                 reader.Close();
-
             }
             catch (Exception)
             {
@@ -35,6 +34,7 @@ namespace DeployApp
         {
             executedScripts.ScriptNumber++;
             var scriptPath = $"{basePath}{Path.DirectorySeparatorChar}Script{Path.DirectorySeparatorChar}";
+
             List<string> executedSql = new();
             var cmd = new SqlCommand
             {
@@ -45,7 +45,8 @@ namespace DeployApp
             {
                 while (true)
                 {
-                    var fiels = Directory.EnumerateFiles($"{scriptPath}{executedScripts.Folder}", $"{executedScripts.ScriptNumber!.Value:00}.*.sql");
+                    var fiels = Directory.EnumerateFiles($"{scriptPath}{executedScripts.Folder}",
+                        $"{executedScripts.ScriptNumber!.Value:00}.*.sql");
 
                     if (!fiels.Any())
                     {
@@ -54,7 +55,6 @@ namespace DeployApp
 
                     foreach (var file in fiels)
                     {
-
                         var pathArray = file.Split(Path.DirectorySeparatorChar);
                         var fileName = pathArray.Last();
                         var folder = pathArray[^2];
@@ -79,9 +79,11 @@ namespace DeployApp
                             throw new Exception(ex.Message);
                         }
                     }
+
                     cmd.Parameters.Clear();
                     executedScripts.ScriptNumber++;
                 }
+
                 executedScripts.Folder = (Convert.ToDecimal(executedScripts.Folder) + 1).ToString("0000");
                 executedScripts.ScriptNumber = 0;
             }

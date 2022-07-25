@@ -32,9 +32,9 @@ const EditLocation = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            setForm({ ...form, ...data! });
+            setForm((prev) => ({ ...prev, ...data! }));
         }
-    }, [isLoading]);
+    }, [isLoading, isSuccess, data]);
 
     if (isLoading) {
         return <CircularProgress />;

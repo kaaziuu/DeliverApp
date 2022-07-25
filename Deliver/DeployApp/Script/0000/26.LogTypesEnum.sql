@@ -1,5 +1,4 @@
-INSERT INTO "LogTypesEnum"
-	(Id, LogType)
-VALUES
-	(1, 'Exception'),
-	(2, 'Info');
+CREATE TABLE "LogTypesEnum" (
+	Id INT NOT NULL PRIMARY KEY,
+	LogType VARCHAR(255)
+);

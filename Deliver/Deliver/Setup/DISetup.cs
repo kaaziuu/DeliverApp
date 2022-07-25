@@ -73,6 +73,9 @@ public static class DISetup
         services.Configure<LoggedUser>(configuration.GetSection("AppUser"))
             .AddScoped<LoggedUser>();
 
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"))
+            .AddScoped<JwtSettings>();
+
         return services;
     }
 }

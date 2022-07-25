@@ -1,12 +1,14 @@
-﻿using Deliver.Middleware;
-using Deliver.Settings;
+﻿using System.Text.Json;
+using Deliver.Middleware;
 using Deliver.Setup;
-using System.Text.Json;
+using DeployApp;
 
 namespace Deliver
 {
     public class Startup
     {
+        const string useSqlArg = "localSql";
+        const string onlySqlArg = "onlySql";
         private readonly IConfiguration _configuration;
         private readonly IHostEnvironment _environment;
 
@@ -18,6 +20,8 @@ namespace Deliver
 
         public void ConfigureServices(IServiceCollection services)
         {
+            Deploy.RunSqlScript(_configuration.GetConnectionString("DefaultConnection"));
+
             services.SetupDb(_configuration);
 
             services.RegisterSettings(_configuration);
@@ -57,10 +61,10 @@ namespace Deliver
             app.UseAuthentication();
 
             app.UseCors(x => x
-                 .SetIsOriginAllowed(o => true)
-                 .AllowAnyMethod()
-                 .AllowAnyHeader()
-                 .AllowCredentials());
+                .SetIsOriginAllowed(o => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.UseMiddleware<CatchAppExceptionMiddleware>();
 
@@ -68,11 +72,7 @@ namespace Deliver
 
             app.UseMiddleware<JwtMiddleware>();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
-
     }
 }

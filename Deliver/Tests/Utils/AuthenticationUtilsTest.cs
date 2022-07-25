@@ -42,13 +42,13 @@ public class AuthenticationUtilsTest
         }
     }.BuildMock();
 
-    private readonly AppSettings _appSettings = new()
+    private readonly JwtSettings _jwtSettings = new()
     {
         Secret = "secret key for mock tests"
     };
 
     private readonly IRefreshTokenRepository _refreshTokenRepositoryMock;
-    private readonly IOptions<AppSettings> _appSettignsMock;
+    private readonly IOptions<JwtSettings> _jwtSettingsMock;
     private readonly AuthenticationUtils _service;
 
     public AuthenticationUtilsTest()
@@ -58,10 +58,10 @@ public class AuthenticationUtilsTest
         _refreshTokenRepositoryMock.UpdateAsync(Arg.Any<RefreshToken>()).Returns(true);
         _refreshTokenRepositoryMock.GetAll().Returns(_refreshTokens);
 
-        _appSettignsMock = Substitute.For<IOptions<AppSettings>>();
-        _appSettignsMock.Value.Returns(_appSettings);
-
-        _service = new AuthenticationUtils(_refreshTokenRepositoryMock, _appSettignsMock);
+        _jwtSettingsMock = Substitute.For<IOptions<JwtSettings>>();
+        _jwtSettingsMock.Value.Returns(_jwtSettings);
+        
+        _service = new AuthenticationUtils(_refreshTokenRepositoryMock, _jwtSettingsMock);
     }
 
     [Fact]
@@ -107,7 +107,7 @@ public class AuthenticationUtilsTest
     }
 
     [Fact]
-    public void ValidateJwtToken_WhenTokenIsValid_RetunrUserId()
+    public void ValidateJwtToken_WhenTokenIsValid_ReturnsUserId()
     {
         // arrange
         var user = new User { Id = 10 };

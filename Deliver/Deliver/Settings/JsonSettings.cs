@@ -3,7 +3,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Deliver.Settings
 {
-    public class JsonSettings
+    public static class JsonSettings
     {
         public static JsonSerializerSettings GetJsonSerializerSettings()
         {

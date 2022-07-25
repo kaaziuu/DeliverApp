@@ -1,12 +1,15 @@
 const fs = require("fs");
 
-const baseDir = "./config";
+const baseDir = process.argv.length > 3 ? `${process.argv[3]}` : ".";
+
+const configDir = `${baseDir}/config`;
 const env = process.argv[2];
 
-let data = JSON.parse(fs.readFileSync(`${baseDir}/config.json`));
-data = { ...data, ...JSON.parse(fs.readFileSync(`${baseDir}/config.${env}.json`)) };
+let data = JSON.parse(fs.readFileSync(`${configDir}/config.json`));
 
-fs.writeFile("./public/config.json", JSON.stringify(data), (err) => {
+data = { ...data, ...JSON.parse(fs.readFileSync(`${configDir}/config.${env}.json`)) };
+
+fs.writeFile(`${baseDir}/public/config.json`, JSON.stringify(data), (err) => {
     if (err) throw err;
     console.log(data);
 });

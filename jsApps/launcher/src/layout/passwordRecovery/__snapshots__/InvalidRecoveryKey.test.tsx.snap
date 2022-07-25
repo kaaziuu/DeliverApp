@@ -28,7 +28,7 @@ Object {
             </svg>
           </div>
           <div
-            class="MuiAlert-message css-1pxa9xg-MuiAlert-message"
+            class="MuiAlert-message css-acap47-MuiAlert-message"
           >
             Your recovery link is invalid
           </div>
@@ -70,7 +70,7 @@ Object {
           </svg>
         </div>
         <div
-          class="MuiAlert-message css-1pxa9xg-MuiAlert-message"
+          class="MuiAlert-message css-acap47-MuiAlert-message"
         >
           Your recovery link is invalid
         </div>

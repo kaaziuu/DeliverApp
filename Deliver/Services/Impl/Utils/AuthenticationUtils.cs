@@ -15,18 +15,18 @@ namespace Services.Impl.Utils;
 public class AuthenticationUtils : IAuthenticationUtils
 {
     private readonly IRefreshTokenRepository _refreshTokenRepository;
-    private readonly AppSettings _appSettings;
+    private readonly JwtSettings _jwtSetting;
 
-    public AuthenticationUtils(IRefreshTokenRepository refreshTokenRepository, IOptions<AppSettings> appSettings)
+    public AuthenticationUtils(IRefreshTokenRepository refreshTokenRepository, IOptions<JwtSettings> jwtSetting)
     {
         _refreshTokenRepository = refreshTokenRepository;
-        _appSettings = appSettings.Value;
+        _jwtSetting = jwtSetting.Value;
     }
 
     public string GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = Encoding.ASCII.GetBytes(_jwtSetting.Secret);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -76,7 +76,7 @@ public class AuthenticationUtils : IAuthenticationUtils
         }
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = Encoding.ASCII.GetBytes(_jwtSetting.Secret);
 
         try
         {

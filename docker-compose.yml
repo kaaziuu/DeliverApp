@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+    front:
+        volumes:
+            - ./launcher/src:/app/launcher/src
+            - ./utils/:/app/utils
+        container_name: react-app-prod
+        image: react-app-prod
+        build:
+            context: ./jsApps
+
+    sqlserver:
+        image: "mcr.microsoft.com/mssql/server:2017-latest"
+        environment:
+            SA_PASSWORD: "pa55w0rd!"
+            ACCEPT_EULA: "Y"
+            MSSQL_PID: "Express"
+        ports:
+            - "1433:1433"
+        volumes:
+            - ./mssql:/var/lib/mysql
+
+    backend:
+        container_name: api-prod
+        image: api-prod
+        build: ./Deliver/
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Prod
+            - USER_SECRETS_ID=89186441-03b5-48db-89df-fe7775da7b7e
+        ports:
+            - "5000:5000"
+        expose:
+            - 5000
+        depends_on:
+            - sqlserver
+        secrets:
+            - ConnectionStrings__DefaultConnection
+            - JwtSettings__Secret
+            - Mail__Login
+            - Mail__Password
+
+
+    nginx:
+        container_name: nginx
+        build:
+            context: .
+        depends_on:
+            - front
+            - backend
+        ports:
+            - "80:80"
+
+secrets:
+    ConnectionStrings__DefaultConnection:
+        file: ./secret/ConnectionStrings__DefaultConnection
+    JwtSettings__Secret:
+        file: ./secret/JwtSettings__Secret
+    Mail__Login:
+        file: ./secret/Mail__Login
+    Mail__Password:
+        file: ./secret/Mail__Password
